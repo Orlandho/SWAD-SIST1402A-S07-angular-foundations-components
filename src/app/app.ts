@@ -1,12 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { PacienteListComponent } from './components/paciente-list/paciente-list.component';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.scss',
+  standalone: true,
+  imports: [CommonModule, NavbarComponent, PacienteListComponent],
   templateUrl: './app.html',
+  styleUrls: ['./app.scss']
 })
 export class App {
-  protected readonly title = signal('SWAD-SIST1402A-S07-angular-foundations-components');
+  readonly title = signal('SWAD-SIST1402A-S07-angular-foundations-components');
 }

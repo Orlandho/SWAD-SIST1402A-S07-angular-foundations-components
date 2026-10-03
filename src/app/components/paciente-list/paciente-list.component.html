@@ -1,0 +1,152 @@
+<div class="container py-4">
+  <!-- Tarjetas de Metricas -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm p-3 bg-white">
+        <span class="text-muted small text-uppercase fw-semibold">Total Pacientes</span>
+        <div class="h3 fw-bold text-primary mb-0 mt-1">{{ totalPacientes() }}</div>
+        <span class="small text-secondary mt-1">Registrados en el sistema</span>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm p-3 bg-white">
+        <span class="text-muted small text-uppercase fw-semibold">En Atencion Activa</span>
+        <div class="h3 fw-bold text-success mb-0 mt-1">{{ totalActivos() }}</div>
+        <span class="small text-secondary mt-1">Actualmente en seguimiento</span>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm p-3 bg-white">
+        <span class="text-muted small text-uppercase fw-semibold">Triaje Critico</span>
+        <div class="h3 fw-bold text-danger mb-0 mt-1">{{ totalCriticos() }}</div>
+        <span class="small text-secondary mt-1">Prioridad de atencion inmediata</span>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-3">
+      <div class="card border-0 shadow-sm p-3 bg-white">
+        <span class="text-muted small text-uppercase fw-semibold">Inactivos / Alta</span>
+        <div class="h3 fw-bold text-secondary mb-0 mt-1">{{ totalInactivos() }}</div>
+        <span class="small text-secondary mt-1">Atencion finalizada</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Filtros y Acciones -->
+  <div class="card border-0 shadow-sm p-3 mb-4 bg-white">
+    <div class="row g-3 align-items-center">
+      <!-- Buscador -->
+      <div class="col-12 col-md-5">
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search text-muted" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </svg>
+          </span>
+          <input type="text"
+                 class="form-control bg-light border-start-0"
+                 placeholder="Buscar por nombre, DNI o diagnostico..."
+                 [ngModel]="busqueda()"
+                 (ngModelChange)="busqueda.set($event)">
+        </div>
+      </div>
+
+      <!-- Filtro de Estado -->
+      <div class="col-6 col-md-3">
+        <select class="form-select bg-light"
+                [ngModel]="filtroEstado()"
+                (ngModelChange)="filtroEstado.set($event)">
+          <option value="TODOS">Todos los estados</option>
+          <option value="ACTIVOS">Solo Activos</option>
+          <option value="INACTIVOS">Solo Inactivos</option>
+        </select>
+      </div>
+
+      <!-- Filtro de Triaje -->
+      <div class="col-6 col-md-2">
+        <select class="form-select bg-light"
+                [ngModel]="filtroTriaje()"
+                (ngModelChange)="filtroTriaje.set($event)">
+          <option value="TODOS">Todos los triajes</option>
+          <option value="Bajo">Triaje Bajo</option>
+          <option value="Medio">Triaje Medio</option>
+          <option value="Critico">Triaje Critico</option>
+        </select>
+      </div>
+
+      <!-- Boton Nuevo Paciente -->
+      <div class="col-12 col-md-2 text-md-end">
+        <button type="button"
+                class="btn btn-primary w-100 fw-semibold"
+                (click)="toggleFormulario()">
+          {{ formularioVisible ? 'Cerrar Registro' : '+ Nuevo Paciente' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario Desplegable para Nuevo Paciente -->
+    @if (formularioVisible) {
+      <div class="border-top mt-3 pt-3">
+        <h5 class="fw-bold mb-3 text-primary">Registrar Nuevo Paciente en Admision</h5>
+        
+        @if (mensajeError) {
+          <div class="alert alert-danger py-2 small mb-3">
+            {{ mensajeError }}
+          </div>
+        }
+
+        <div class="row g-2">
+          <div class="col-12 col-md-4">
+            <label class="form-label small text-muted">Nombre y Apellidos</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="nuevoNombre" placeholder="Ej: Roberto Salas">
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="form-label small text-muted">DNI (8 digitos)</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="nuevoDni" maxlength="8" placeholder="Ej: 71234567">
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="form-label small text-muted">Edad</label>
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="nuevoEdad" placeholder="Ej: 32">
+          </div>
+          <div class="col-6 col-md-2">
+            <label class="form-label small text-muted">Nivel de Triaje</label>
+            <select class="form-select form-select-sm" [(ngModel)]="nuevoTriaje">
+              <option value="Bajo">Bajo (Verde)</option>
+              <option value="Medio">Medio (Amarillo)</option>
+              <option value="Critico">Critico (Rojo)</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-10">
+            <label class="form-label small text-muted">Diagnostico / Motivo de consulta</label>
+            <input type="text" class="form-control form-control-sm" [(ngModel)]="nuevoDiagnostico" placeholder="Ej: Cefalea intensa con fotofobia">
+          </div>
+          <div class="col-12 col-md-2 d-flex align-items-end">
+            <button type="button" class="btn btn-success btn-sm w-100 fw-semibold" (click)="registrarPaciente()">
+              Guardar Paciente
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Grilla de Tarjetas de Pacientes -->
+  @if (pacientesFiltrados().length === 0) {
+    <div class="card border-0 shadow-sm p-5 text-center bg-white">
+      <div class="py-4">
+        <h4 class="text-secondary fw-semibold">No se encontraron pacientes</h4>
+        <p class="text-muted small">Intente cambiar el termino de busqueda o los filtros seleccionados.</p>
+      </div>
+    </div>
+  } @else {
+    <div class="row g-4">
+      @for (p of pacientesFiltrados(); track p.id) {
+        <div class="col-12 col-md-6 col-lg-4">
+          <app-paciente-card
+            [paciente]="p"
+            (estadoCambiado)="actualizarEstado($event)">
+          </app-paciente-card>
+        </div>
+      }
+    </div>
+  }
+</div>

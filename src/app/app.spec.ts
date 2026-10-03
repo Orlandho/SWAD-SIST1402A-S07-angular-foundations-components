@@ -1,24 +1,30 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
 
-describe('App', () => {
+describe('App Component', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('debe instanciar la aplicacion correctamente', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('debe tener el titulo del proyecto configurado', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    const app = fixture.componentInstance;
+    expect(app.title()).toBe('SWAD-SIST1402A-S07-angular-foundations-components');
+  });
+
+  it('debe renderizar el encabezado y el listado de pacientes', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, SWAD-SIST1402A-S07-angular-foundations-components');
+    expect(compiled.querySelector('app-navbar')).toBeTruthy();
+    expect(compiled.querySelector('app-paciente-list')).toBeTruthy();
   });
 });
