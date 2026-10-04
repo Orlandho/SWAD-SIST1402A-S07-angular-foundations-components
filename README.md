@@ -28,6 +28,11 @@ En el desarrollo de software corporativo contemporaneo, las interfaces de usuari
 
 ## 2. Diagrama Arquitectonico y Flujo de Componentes
 
+![Diagrama Arquitectónico](./mermaid%20diagramas/arquitectura.svg)
+
+<details>
+<summary>Visualizar especificación fuente en formato Mermaid</summary>
+
 ```mermaid
 graph TD
     App[App Root Component] --> Navbar[Navbar Component]
@@ -40,6 +45,8 @@ graph TD
     Card1 -.-> EventOut[Event Binding: estadoCambiado]
     EventOut -.-> PacienteList
 ```
+
+</details>
 
 ---
 
@@ -89,8 +96,9 @@ Resultados verificados:
 - Instanciacion correcta de componentes en el arbol de pruebas de `TestBed`.
 - Validacion estricta del contrato inicial: `nombre === 'Ana Pérez'` y `activo === true`.
 - Evaluacion de alternancia de estado clinico y emision de eventos `@Output()`.
-- Validacion de actualizacion y renderizado reactivo ante entradas por `@Input()`.
-- Total: 8/8 pruebas unitarias aprobadas (100% exito).
+- Validacion de sincronizacion reactiva continua con `effect()` ante entradas por `@Input()`.
+- Pruebas integrales de `PacienteListComponent`: filtrado por busqueda, estado activo/inactivo, nivel de triaje, validacion estricta de formularios y metricas reactivas computadas (`computed()`).
+- Total: 16/16 pruebas unitarias aprobadas (100% exito).
 
 ---
 

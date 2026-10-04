@@ -1,4 +1,4 @@
-import { Component, input, output, OnInit } from '@angular/core';
+import { Component, effect, input, output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Paciente } from '../../models/paciente.model';
 
@@ -29,19 +29,25 @@ export class PacienteCardComponent implements OnInit {
   // Evento emitido al alternar estado activo
   readonly estadoCambiado = output<{ id?: number; activo: boolean }>();
 
+  constructor() {
+    effect(() => {
+      const p = this.paciente();
+      if (p) {
+        this.nombre = p.nombre;
+        this.activo = p.activo;
+        this.edad = p.edad;
+        this.dni = p.dni;
+        this.diagnostico = p.diagnostico;
+        this.triaje = p.triaje;
+        this.fechaIngreso = p.fechaIngreso;
+        this.telefono = p.telefono;
+        this.alergias = p.alergias ?? [];
+      }
+    });
+  }
+
   ngOnInit(): void {
-    const p = this.paciente();
-    if (p) {
-      this.nombre = p.nombre;
-      this.activo = p.activo;
-      this.edad = p.edad;
-      this.dni = p.dni;
-      this.diagnostico = p.diagnostico;
-      this.triaje = p.triaje;
-      this.fechaIngreso = p.fechaIngreso;
-      this.telefono = p.telefono;
-      this.alergias = p.alergias ?? [];
-    }
+    // Sincronizacion complementaria de ciclo de vida
   }
 
   toggleActivo(): void {

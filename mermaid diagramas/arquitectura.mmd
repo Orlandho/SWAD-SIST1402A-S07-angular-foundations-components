@@ -1,0 +1,10 @@
+graph TD
+    App[App Root Component] --> Navbar[Navbar Component]
+    App --> PacienteList[Paciente List Component]
+    PacienteList --> MetricCards[Tarjetas de Metricas Computadas]
+    PacienteList --> FilterBar[Barra de Filtros y Busqueda]
+    PacienteList --> Grid[Grilla Responsiva de Pacientes]
+    Grid --> Card1[PacienteCardComponent: Ana Perez]
+    Grid --> CardN[PacienteCardComponent: Pacientes Dinamicos]
+    Card1 -.-> EventOut[Event Binding: estadoCambiado]
+    EventOut -.-> PacienteList

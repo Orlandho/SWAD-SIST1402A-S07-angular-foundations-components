@@ -66,7 +66,6 @@ describe('PacienteCardComponent', () => {
     };
 
     fixture.componentRef.setInput('paciente', testPaciente);
-    component.ngOnInit();
     fixture.detectChanges();
 
     expect(component.nombre).toBe('Mario Vargas');
